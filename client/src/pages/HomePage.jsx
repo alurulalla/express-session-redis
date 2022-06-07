@@ -8,11 +8,33 @@ import {
   Tabs,
   Text,
 } from "@chakra-ui/react";
+import { useEffect } from "react";
 import Login from "../components/Login";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
+import Register from "../components/Register";
 
 const HomePage = () => {
+  const history = useHistory();
+
+  useEffect(() => {
+    getUserDetails();
+  }, []);
+
+  const getUserDetails = async () => {
+    try {
+      const { data } = await axios.get("/api/me");
+
+      if (data) {
+        history.replace("/dashboard");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <Container maxW="xl" centerContent>
+    <Container centerContent>
       <Box
         d="flex"
         justifyContent="center"
@@ -44,7 +66,9 @@ const HomePage = () => {
             <TabPanel>
               <Login />
             </TabPanel>
-            <TabPanel>{/* <SignUp /> */}</TabPanel>
+            <TabPanel>
+              <Register />
+            </TabPanel>
           </TabPanels>
         </Tabs>
       </Box>

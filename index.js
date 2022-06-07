@@ -144,6 +144,22 @@ const changePlan = (req, res) => {
   return res.json("successfully updated package");
 };
 
+const registerUser = (req, res) => {
+  const { email, password } = req.body;
+
+  const user = users.find((x) => x.email === email);
+
+  if (!user) {
+    users.push({
+      id: uuidv4(),
+      email,
+      password,
+    });
+  }
+
+  return res.json({ message: "user registered successfully" });
+};
+
 app.post("/api/user/login", loginUser);
 app.get("/api/me", isAuth, getUserDetails);
 app.get("/api/packagedetails", isAuth, getPackageDetails);
@@ -151,5 +167,6 @@ app.post("/api/onselectedpackage", isAuth, setSelectedPackage);
 app.get("/api/getselectedpackage", isAuth, getSelectedPackage);
 app.post("/api/changeplan", isAuth, changePlan);
 app.post("/api/user/logout", isAuth, logoutUser);
+app.post("/api/user/register", registerUser);
 
 app.listen(PORT, () => console.log(`app running on Port: ${PORT}`));
