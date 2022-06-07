@@ -11,7 +11,10 @@ const RedisStore = require("connect-redis")(session);
 dotenv.config();
 app.use(express.json());
 
-const redisClient = new Redis();
+const redisClient = new Redis({
+  port: process.env.REDIS_PORT,
+  host: process.env.REDIS_END_POINT,
+});
 
 redisClient.on("connect", () => console.log("connected to redis"));
 const PORT = process.env.PORT || 3000;
